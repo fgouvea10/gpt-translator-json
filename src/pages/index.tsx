@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import axios from 'axios'
+import toast from 'react-hot-toast';
 
 type LanguageType = "portuguese" | "english" | "spanish" | "french";
 
@@ -8,6 +10,7 @@ export default function Home() {
   const [inputLanguage, setInputLanguage] = useState<null | string>('portuguese');
   const [outputLanguage, setOutputLanguage] = useState<null | string>('english');
   const [inputValue, setInputValue] = useState('')
+  const [outputValue, setOutputValue] = useState('')
 
   const { register, handleSubmit } = useForm()
 
@@ -31,11 +34,30 @@ export default function Home() {
     return
   };
 
-  const handleTranslateText = (data: any) => {
-    const gptInputText = `Translate only the values and not the keys of the JSON below to ${outputLanguage}`
+  const handleTranslateText = async (data: any) => {
+    const gptInputText = `Translate only the values and not the keys of the JSON below in ${outputLanguage}: ${data.inputValue}`
 
-    console.log('GPT EXEPCTEC: ', `${gptInputText} ${data.inputValue}`)
-    console.log('input text', data.inputValue)
+    const payload = {
+      promt: gptInputText,
+      temperature: 0.5,
+      n: 1,
+      model: 'text-davinci-003'
+    }
+
+    try {
+      const { data: response } = await axios.post('https://api.openai.com/v1/completions', payload, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer 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"
+      }
+    })
+
+    setOutputValue(response)
+    } catch (error) {
+      console.log('catch')
+      toast.error("An error ocurred. Please try again later.")
+    }
   }
 
   return (
