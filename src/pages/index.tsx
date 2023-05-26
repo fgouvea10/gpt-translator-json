@@ -49,7 +49,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "Bearer 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"
+          `Bearer ${process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY}`
       }
     })
 
