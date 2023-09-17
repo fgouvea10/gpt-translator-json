@@ -1,16 +1,6 @@
-import type { AppProps } from "next/app";
-import { Toaster } from "react-hot-toast";
-
-import { Header } from "@/components/header";
-
-import "@/styles/globals.css";
+import '@/styles/globals.css'
+import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <div className="flex flex-col bg-zinc-900 min-h-screen overflow-y-auto lg:overflow-y-hidden">
-      <Header />
-      <Component {...pageProps} />
-      <Toaster position="top-center" reverseOrder={false} />
-    </div>
-  );
+  return <Component {...pageProps} />
 }
